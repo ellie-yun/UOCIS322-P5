@@ -23,8 +23,7 @@
          integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
          crossorigin="anonymous"></script>
       <!-- moment.js is the JavaScript equivalent of arrow.py -->
-      <script
-      src="{{ url_for('static', filename="js/moment.min.js") }}"></script>
+      <script src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
    </head>
    <!-- Our own stylesheet -->
    <link rel="stylesheet" href="/static/css/calc.css" />
@@ -62,11 +61,16 @@
                   </select>
                </div>
                <!-- columns 1 to 4  -->
-               <div class="col-md-6">
+               <div class="col-md-4">
                   <label>Begins at</label>
                   <input type="datetime-local" name="begin_date" id="begin_date" value="2021-01-01T00:00" />
                </div>
-               <!-- columns 5 to 10 -->
+               <!-- columns 5 to 8 -->
+               <div class="col-md-4">
+                  <button id="submit">Submit</button>
+                  <button id="display">Display</button>
+               </div>
+               <!-- columns 9 to 10 -->
             </div>
             <!-- row -->
             <br />  <!-- a little vertical space -->
@@ -187,6 +191,39 @@
                        }
                     });
 
+                $('#submit').click(
+                    function(e){
+                        e.preventDefault();
+                        // Collect all the non-empty fields and then sent it to /insert
+                        // alert("Control location can't be negative!");
+                        var table = {};
+                        $('.control').each(
+                            function(index, obj){
+                                var row = {};
+                                row.km = $(obj).find("input[name='km']").val();
+                                row.open = $(obj).find("input[name='open']").val();
+                                row.close = $(obj).find("input[name='close']").val();
+                                // row.push($(obj).find("input[name='km']").val());
+                                // row.push($(obj).find("input[name='open']").val());
+                                // row.push($(obj).find("input[name='close']").val());
+                                table[index] = row;
+                            }
+                        );
+                        console.log(table);
+                        $.post("/insert", {table: JSON.stringify(table)}, function(response){
+                           console.log("response: ", response.output);
+                        }, "json");
+                    }
+                );
+
+
+                $('#display').click(
+                    function(e){
+                        e.preventDefault();
+                        // Redirect to /display
+                        
+                    }
+                );
                });
 
          </script>
