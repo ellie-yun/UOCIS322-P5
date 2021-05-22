@@ -57,7 +57,6 @@ def display():
     retrieval = db_client.list_all_rows("latestsubmit")
     brevet = retrieval[0]['brevet']
     begin_date = retrieval[0]['begin']
-    app.logger.debug(retrieval)
     return flask.render_template('display.html', result=retrieval, brevet=brevet, begin=begin_date)
 
 
