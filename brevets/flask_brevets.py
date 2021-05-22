@@ -55,8 +55,11 @@ def submit():
 @app.route("/display")
 def display():
     retrieval = db_client.list_all_rows("latestsubmit")
-    brevet = retrieval[0]['brevet']
-    begin_date = retrieval[0]['begin']
+    app.logger.debug(retrieval)
+    brevet = begin_date = ""
+    if len(retrieval) > 0:
+        brevet = retrieval[0]['brevet']
+        begin_date = retrieval[0]['begin']
     return flask.render_template('display.html', result=retrieval, brevet=brevet, begin=begin_date)
 
 
