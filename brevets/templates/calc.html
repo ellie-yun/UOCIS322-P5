@@ -195,33 +195,36 @@
                     function(e){
                         e.preventDefault();
                         // Collect all the non-empty fields and then sent it to /insert
-                        // alert("Control location can't be negative!");
                         var table = {};
                         $('.control').each(
                             function(index, obj){
                                 var row = {};
+                                row.brevet = $('#brevet_dist_km').val();
+                                row.begin = $('#begin_date').val();
                                 row.km = $(obj).find("input[name='km']").val();
                                 row.open = $(obj).find("input[name='open']").val();
                                 row.close = $(obj).find("input[name='close']").val();
-                                // row.push($(obj).find("input[name='km']").val());
-                                // row.push($(obj).find("input[name='open']").val());
-                                // row.push($(obj).find("input[name='close']").val());
                                 table[index] = row;
                             }
                         );
-                        console.log(table);
                         $.post("/insert", {table: JSON.stringify(table)}, function(response){
                            console.log("response: ", response.output);
                         }, "json");
+                        alert("Successfully submitted! Click Display button to see the latest submit result.");
+                        $(".control_time_table tr td input").val("");
+                        $('#brevet_dist_km').val("");
+                        $('#begin_date').val("");
                     }
                 );
 
 
                 $('#display').click(
                     function(e){
+                        var brevet_dist = $('#brevet_dist_km').val();
+
                         e.preventDefault();
                         // Redirect to /display
-                        
+                        window.location.replace("/display");
                     }
                 );
                });

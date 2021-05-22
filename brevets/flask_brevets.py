@@ -37,20 +37,28 @@ def index():
 
 @app.route("/insert", methods=["POST"])
 def submit():
-    list(db.latestsubmit.find())
     data = request.form.to_dict()
     # Converting string representation of list to a list
     data['table'] = eval(data['table'])
     table = data['table']
-    # for i in range(len(table)):
-     #   db.latestsubmit.insert_one()
+    # Remove the previous submit result
+    db.latestsubmit.delete_many({})
+    for i in range(len(table)):
+        row = table[str(i)]
+        # Insert only the rows with km typed in the browser
+        if row['km'] != "":
+            db.latestsubmit.insert_one(row)
     return flask.jsonify(output=str(data))
 
-    """item_doc = {
-        'title': request.form['title'],
-        'body': request.form['body']
-    }
-    db.tododb.insert_one(item_doc)"""
+
+@app.route("/display")
+def display():
+    retrieval = list(db.latestsubmit.find())
+    brevet = retrieval[0]['brevet']
+    begin_date = retrieval[0]['begin']
+    app.logger.debug(retrieval)
+    return flask.render_template('display.html', result=retrieval, brevet=brevet, begin=begin_date)
+
 
 @app.errorhandler(404)
 def page_not_found(error):
