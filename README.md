@@ -21,6 +21,8 @@ Connect a Flask app to MongoDB, and then store control times from Project 4 in t
         `Note: Need to fill in at least one row in order to press the submit button.`
         
     - Upon clicking the `Display` button, the entries from the database should be displayed in a new page.
+        
+        `Note: If you click the Display button before submitting any control times, the redirected page will point it out and ask you to go back and submit something.`
 
 ## Test
 
