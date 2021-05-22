@@ -10,6 +10,7 @@ from pymongo import MongoClient
 from flask import request
 import arrow  # Replacement for datetime, based on moment.js
 import acp_times  # Brevet time calculations
+import db # Database operations
 import config
 
 import logging
@@ -20,8 +21,9 @@ import logging
 app = flask.Flask(__name__)
 CONFIG = config.configuration()
 
-client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
-db = client.brevetsdb
+db_client = db.Mongodb(os.environ['MONGODB_HOSTNAME'])
+db_client.connect()
+db_client.set_db("brevetsdb")
 
 ###
 # Pages
@@ -42,18 +44,20 @@ def submit():
     data['table'] = eval(data['table'])
     table = data['table']
     # Remove the previous submit result
-    db.latestsubmit.delete_many({})
+    db_client.delete_all_rows("latestsubmit")
     for i in range(len(table)):
         row = table[str(i)]
         # Insert only the rows with km typed in the browser
         if row['km'] != "":
-            db.latestsubmit.insert_one(row)
+            db_client.insert("latestsubmit", row)
+            # db.latestsubmit.insert_one(row)
     return flask.jsonify(output=str(data))
 
 
 @app.route("/display")
 def display():
-    retrieval = list(db.latestsubmit.find())
+    # retrieval = list(db.latestsubmit.find())
+    retrieval = db_client.list_all_rows("latestsubmit")
     brevet = retrieval[0]['brevet']
     begin_date = retrieval[0]['begin']
     app.logger.debug(retrieval)
