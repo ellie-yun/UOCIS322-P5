@@ -17,7 +17,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s',
 log = logging.getLogger(__name__)
 
 def test_db_operations():
-    test_client = Mongodb()
+    test_client = Mongodb("ourdb")
     test_client.connect()
     test_client.set_db("testdb")
 
