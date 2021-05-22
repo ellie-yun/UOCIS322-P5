@@ -15,23 +15,6 @@ logging.basicConfig(format='%(levelname)s:%(message)s',
                     level=logging.WARNING)
 log = logging.getLogger(__name__)
 
-def test_neg():
-    # Test when the control distance is within the first 60km
-    nose.tools.assert_raises(AssertionError, open_time, -10, 200, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, -1, 300, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, -12, 400, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, -200, 600, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, -20, 1000, arrow.get("2021-01-01T00:00"))
-
-
-def test_long():
-    # Test when the control distance is over 20% longer than the brevet distance
-    nose.tools.assert_raises(AssertionError, open_time, 250, 200, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, 366, 300, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, 481, 400, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, 731, 600, arrow.get("2021-01-01T00:00"))
-    nose.tools.assert_raises(AssertionError, open_time, 1220, 1000, arrow.get("2021-01-01T00:00"))
-
 
 def test_200km():
     # Test when the control distance is within the first 60km
