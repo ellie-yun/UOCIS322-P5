@@ -196,24 +196,37 @@
                         e.preventDefault();
                         // Collect all the non-empty fields and then sent it to /insert
                         var table = {};
+                        // Counting the number of rows that were filled in
+                        var filled = 0;
                         $('.control').each(
                             function(index, obj){
-                                var row = {};
-                                row.brevet = $('#brevet_dist_km').val();
-                                row.begin = $('#begin_date').val();
-                                row.km = $(obj).find("input[name='km']").val();
-                                row.open = $(obj).find("input[name='open']").val();
-                                row.close = $(obj).find("input[name='close']").val();
-                                table[index] = row;
+                                var km = $(obj).find("input[name='km']").val()
+                                // Check if anything was typed in.
+                                if (km != ""){
+                                   var row = {};
+                                   row.brevet = $('#brevet_dist_km').val();
+                                   row.begin = $('#begin_date').val();
+                                   row.km = km;
+                                   row.open = $(obj).find("input[name='open']").val();
+                                   row.close = $(obj).find("input[name='close']").val();
+                                   table[index] = row;
+                                   filled = filled + 1;
+                                }
                             }
                         );
-                        $.post("/insert", {table: JSON.stringify(table)}, function(response){
-                           console.log("response: ", response.output);
-                        }, "json");
-                        alert("Successfully submitted! Click Display button to see the latest submit result.");
-                        $(".control_time_table tr td input").val("");
-                        $('#brevet_dist_km').val("");
-                        $('#begin_date').val("");
+                        // Case: When nothing was typed in on either miles or km
+                        if (filled == 0) {
+                           alert("Need to fill in at least one row!");
+                        }
+                        else {
+                           $.post("/insert", {table: JSON.stringify(table)}, function(response){
+                              console.log("response: ", response.output);
+                           }, "json");
+                           alert("Successfully submitted! Click Display button to see the latest submit result.");
+                           $(".control_time_table tr td input").val("");
+                           $('#brevet_dist_km').val("");
+                           $('#begin_date').val("");
+                        }
                     }
                 );
 

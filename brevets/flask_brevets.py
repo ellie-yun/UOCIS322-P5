@@ -45,18 +45,15 @@ def submit():
     table = data['table']
     # Remove the previous submit result
     db_client.delete_all_rows("latestsubmit")
+
     for i in range(len(table)):
         row = table[str(i)]
-        # Insert only the rows with km typed in the browser
-        if row['km'] != "":
-            db_client.insert("latestsubmit", row)
-            # db.latestsubmit.insert_one(row)
+        db_client.insert("latestsubmit", row)
     return flask.jsonify(output=str(data))
 
 
 @app.route("/display")
 def display():
-    # retrieval = list(db.latestsubmit.find())
     retrieval = db_client.list_all_rows("latestsubmit")
     brevet = retrieval[0]['brevet']
     begin_date = retrieval[0]['begin']
