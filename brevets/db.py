@@ -4,7 +4,7 @@ Database insertion and retrieval
 from pymongo import MongoClient
 
 class Mongodb:
-    def __init__(self, client_name="testdb"):
+    def __init__(self, client_name="testclient"):
         self.client_name = client_name
         self.client = None
         self.db = None
